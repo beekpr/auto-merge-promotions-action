@@ -43,23 +43,27 @@ jobs:
 ## Example with Custom Configuration
 
 ```yaml
-name: Auto Promote PRs
+name: Auto Merge Promotion PRs
 
 on:
   schedule:
-    - cron: '0 9 * * 1-5'  # Weekdays at 9am
-  workflow_dispatch:
+    # Runs at 9:00 UTC (10:00 CET) on Monday-Friday
+    - cron: '0 9 * * 1-5'
+  workflow_dispatch: # Allow manual triggering
 
 jobs:
-  auto-promote:
+  auto-merge:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Auto Merge Promotion PRs
-        uses: your-org/auto-promote@v1
+        uses: beekpr/auto-merge-promotions-action@master
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          threshold-days: '3'
-          target-branches: 'staging,qa,production'
+          github-token: ${{ secrets.BKPR_GC_GH_ACTIONS_TOKEN }}
+          threshold-days: '7'
+          target-branches: 'staging,production'
           title-prefix: '[AutoPromote]'
 ```
 
