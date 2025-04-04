@@ -1,0 +1,28 @@
+name: 'Beekeeper Auto Merge Promotion PRs'
+description: 'Automatically merges PRs with [Promotion] in title after a specified time period'
+author: 'stefan.irimescu@beekeeper.io'
+inputs:
+  github-token:
+    description: 'GitHub token for API access'
+    required: true
+  threshold-days:
+    description: 'Number of days before PRs are auto-merged'
+    required: false
+    default: '7'
+  target-branches:
+    description: 'Comma-separated list of branches to target for auto-merge'
+    required: false
+    default: 'staging,production'
+  title-prefix:
+    description: 'The prefix to look for in PR titles'
+    required: false
+    default: '[Promotion]'
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  env:
+    GITHUB_TOKEN: ${{ inputs.github-token }}
+    THRESHOLD_DAYS: ${{ inputs.threshold-days }}
+    TARGET_BRANCHES: ${{ inputs.target-branches }}
+    TITLE_PREFIX: ${{ inputs.title-prefix }}
